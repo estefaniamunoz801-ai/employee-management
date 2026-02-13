@@ -1,7 +1,6 @@
 const { Employee } = require('../models')
 // Implement ICommonRepository interface from Business Layer
 // Implement DuplicateEntityException exception from Utils
-// Review 'UserEntity' in returns
 
 class EmployeeRepository extends ICommonRepository {
 
@@ -16,8 +15,7 @@ class EmployeeRepository extends ICommonRepository {
 
     async get(numDni) {
         try {
-            const found = await Employee.findOne({ where: {dni: numDni} });
-            return found ? new UserEntity(found) : null //
+            return await Employee.findOne({ where: {dni: numDni} });
         } 
         catch (error) {
             throw new Error('Error getting employee in database: ' + error.message)
@@ -26,12 +24,11 @@ class EmployeeRepository extends ICommonRepository {
 
     async add(entity) {
         try {
-            const entityExists = await Employee.findOne({ where: {dni: entity.dni} });
-            if(entityExists) {
+            const exists = await Employee.findOne({ where: {dni: entity.dni} });
+            if(exists) {
                 throw new DuplicateEntityException();  //
             }
-            const created = await Employee.create(entity)
-            return new UserEntity(created) //
+            return await Employee.create(entity)
         }
         catch (error) {
             throw new Error('Error adding employee in database: ' + error.message)
@@ -40,12 +37,12 @@ class EmployeeRepository extends ICommonRepository {
 
     async edit(entity) {
         try {
-            const entityExists = await Employee.findOne({ where: {dni: entity.dni} });
-            if(entityExists == null) {
+            const employee = await Employee.findOne({ where: {dni: entity.dni} });
+            if(!employee) {
                 throw new Error("Employee not found")
             }
-            const updated = Employee.update(entity, { where: {dni: entity.dni} });
-            return new UserEntity(updated) //
+            await employee.update(entity);
+            return employee;
         } 
         catch (error) {
             throw new Error("Error updating employee in database: " + error.message)
@@ -54,11 +51,11 @@ class EmployeeRepository extends ICommonRepository {
 
     async remove(numDni) {
         try {
-            const entityExists = await Employee.findOne({ where: {dni: numDni} });
-            if(entityExists == null) {
+            const employee = await Employee.findOne({ where: {dni: numDni} });
+            if(!employee) {
                 throw new Error("Employee not found")
             }
-            return await Employee.destroy({ where: {dni: numDni} });
+            return await employee.destroy();
         } 
         catch (error) {
             throw new Error("Error removing employee in database: " + error.message)

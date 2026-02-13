@@ -1,7 +1,6 @@
 const { Contract } = require('../models')
 // Implement ICommonRepository interface from Business Layer
 // Implement DuplicateEntityException exception from Utils
-// Review 'UserEntity' in returns
 
 class ContractRepository extends ICommonRepository {
 
@@ -16,8 +15,7 @@ class ContractRepository extends ICommonRepository {
 
     async get(uuid) {
         try {
-            const found = await Contract.findOne({ where: {id: uuid} });
-            return found ? new UserEntity(found) : null //
+            return await Contract.findOne({ where: {id: uuid} });
         } 
         catch (error) {
             throw new Error('Error getting contract in database: ' + error.message)
@@ -26,12 +24,11 @@ class ContractRepository extends ICommonRepository {
 
     async add(entity) {
         try {
-            const entityExists = await Contract.findOne({ where: {id: entity.id} });
-            if(entityExists) {
+            const exists = await Contract.findOne({ where: {id: entity.id} });
+            if(exists) {
                 throw new DuplicateEntityException();  //
             }
-            const created = await Contract.create(entity)
-            return new UserEntity(created) //
+            return await Contract.create(entity)
         }
         catch (error) {
             throw new Error('Error adding contract in database: ' + error.message)
@@ -40,12 +37,12 @@ class ContractRepository extends ICommonRepository {
 
     async edit(entity) {
         try {
-            const entityExists = await Contract.findOne({ where: {id: entity.id} });
-            if(entityExists == null) {
+            const contract = await Contract.findOne({ where: {id: entity.id} });
+            if(!contract) {
                 throw new Error("Contract not found")
             }
-            const updated = Contract.update(entity, { where: {id: entity.id} });
-            return new UserEntity(updated) //
+            await contract.update(entity);
+            return contract;
         } 
         catch (error) {
             throw new Error("Error updating contract in database : " + error.message)
@@ -54,11 +51,11 @@ class ContractRepository extends ICommonRepository {
 
     async remove(uuid) {
         try {
-            const entityExists = await Contract.findOne({ where: {id: uuid} });
-            if(entityExists == null) {
+            const contract = await Contract.findOne({ where: {id: uuid} });
+            if(!contract) {
                 throw new Error("Contract not found")
             }
-            return await Contract.destroy({ where: {id: uuid} });
+            return await contract.destroy();
         } 
         catch (error) {
             throw new Error("Error removing contract in database: " + error.message)
