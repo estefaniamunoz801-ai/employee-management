@@ -9,5 +9,3 @@ module.exports = {
     dialect: process.env.DB_DIALECT
   }
 };
-
-console.log(process.env.DB_USER);
