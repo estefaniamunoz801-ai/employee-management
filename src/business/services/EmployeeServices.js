@@ -1,4 +1,4 @@
-// Implements ICommonService from Presentation Layer
+const { IEmployeeServices } = require('../../presentation/interfaces/IEmployeeServices')
 
 class EmployeeServices extends IEmployeeServices {
 
