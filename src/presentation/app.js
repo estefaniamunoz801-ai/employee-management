@@ -1,8 +1,8 @@
 const express = require("express");
 const cors = require("cors");
+const errorHandler = require("./middleware/errorHandler");
 require('dotenv').config();
-// ErrorHandler Middleware
-// Validators waiting
+
 
 const { EmployeeRouter } = require("./routes/EmployeeRoutes");
 const { ContractRouter } = require("./routes/ContractRoutes");
@@ -15,5 +15,6 @@ app.use(express.json());
 
 app.use('/api/users', EmployeeRouter);
 app.use('/api/contracts', ContractRouter);
+app.use(errorHandler);
 
 module.exports = app;
