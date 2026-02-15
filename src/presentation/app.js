@@ -1,15 +1,19 @@
 const express = require("express");
 const cors = require("cors");
+require('dotenv').config();
+// ErrorHandler Middleware
+// Validators waiting
 
-const employeeRoutes = require("./routes/employee.routes");
+const { EmployeeRouter } = require("./routes/EmployeeRoutes");
+const { ContractRouter } = require("./routes/ContractRoutes");
 
 const app = express();
+app.disable('x-powered-by');
 
-// Middlewares
 app.use(cors());
 app.use(express.json());
 
-// Routes
-app.use("/api/employees", employeeRoutes);
+app.use('/api/users', EmployeeRouter);
+app.use('/api/contracts', ContractRouter);
 
 module.exports = app;
