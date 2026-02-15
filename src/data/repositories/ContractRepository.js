@@ -1,6 +1,6 @@
 const { Contract } = require('../models')
-// Implement ICommonRepository interface from Business Layer
-// Implement DuplicateEntityException exception from Utils
+const { ICommonRepository } = require('../../business/interfaces/ICommonRepository')
+const { DuplicateEntityException } = require('../../business/exceptions/DuplicateEntityException')
 
 class ContractRepository extends ICommonRepository {
 
