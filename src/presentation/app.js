@@ -13,7 +13,7 @@ app.disable('x-powered-by');
 app.use(cors());
 app.use(express.json());
 
-app.use('/api/users', EmployeeRouter);
+app.use('/api/employee', EmployeeRouter); //
 app.use('/api/contracts', ContractRouter);
 app.use(errorHandler);
 
