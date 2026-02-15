@@ -1,6 +1,6 @@
 const { body, validationResult } = require("express-validator");
 
-exports.createEmployee = [
+const validateNewEmployee = [
   body("dni")
     .notEmpty()
     .withMessage("DNI is required")
@@ -40,10 +40,15 @@ exports.createEmployee = [
 
     if (!errors.isEmpty()) {
       return res.status(400).json({
-        errors: errors.array(),
+        error: "Validation failed",
+        details: errors.array().map(err => err.msg)
       });
     }
-
     next();
   },
 ];
+
+
+module.exports = {
+  validateNewEmployee
+};
