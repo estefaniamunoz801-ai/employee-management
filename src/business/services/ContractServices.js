@@ -1,4 +1,4 @@
-// Implements IContractService from Presentation Layer
+const { IContractServices } = require('../../presentation/interfaces/IContractServices')
 
 class ContractServices extends IContractServices {
 
